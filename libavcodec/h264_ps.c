@@ -467,6 +467,13 @@ int ff_h264_decode_seq_parameter_set(GetBitContext *gb, AVCodecContext *avctx,
     sps->mb_height                      = get_ue_golomb(gb) + 1;
 
     sps->frame_mbs_only_flag = get_bits1(gb);
+
+    if (sps->mb_height >= INT_MAX / 2) {
+        av_log(avctx, AV_LOG_ERROR, "height overflow\n");
+        goto fail;
+    }
+    sps->mb_height *= 2 - sps->frame_mbs_only_flag;
+
     if (!sps->frame_mbs_only_flag)
         sps->mb_aff = get_bits1(gb);
     else
