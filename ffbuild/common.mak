@@ -87,7 +87,7 @@ COMPILE_MSA = $(call COMPILE,CC,MSAFLAGS)
 
 %.o: %.asm
 	$(COMPILE_X86ASM)
-	-$(if $(ASMSTRIPFLAGS), $(STRIP) $(ASMSTRIPFLAGS) $@)
+	$(if $(STRIP), $(if $(ASMSTRIPFLAGS), $(STRIP) $(ASMSTRIPFLAGS) $@))
 
 %.o: %.rc
 	$(WINDRES) $(IFLAGS) $(foreach ARG,$(CC_DEPFLAGS),--preprocessor-arg "$(ARG)") -o $@ $<
